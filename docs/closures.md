@@ -1,17 +1,17 @@
+# Closures
+
+Rust’s closures are anonymous functions you can save in a variable
+or pass as arguments to other functions. You can create the closure
+in one place and then call the closure elsewhere to evaluate it in a
+different context. Unlike functions, closures can capture values
+from the scope in which they’re defined.
+
+There are more differences between functions and closures. Closures
+don’t usually require you to annotate the types of the parameters or
+the return value like fn functions do. In addition, closures can capture
+values and references from the environment (scope).
+
 ```rust
-// # Closures
-
-// Rust’s closures are anonymous functions you can save in a variable
-// or pass as arguments to other functions. You can create the closure
-// in one place and then call the closure elsewhere to evaluate it in a
-// different context. Unlike functions, closures can capture values
-// from the scope in which they’re defined.
-//
-// There are more differences between functions and closures. Closures
-// don’t usually require you to annotate the types of the parameters or
-// the return value like fn functions do. In addition, closures can capture
-// values and references from the environment (scope).
-
 fn ex_closures() {
     let n = 3;
 
@@ -27,38 +27,40 @@ fn ex_closures() {
     let add_from_env = |x: i32| x + val;
     println!("{}", add_from_env(2));
 }
+```
 
-// ## Closure Traits
-// Each closure is of an anonymous type the compiler creates. You can't refer
-// to the closure concrete type explicitly. The way a closure captures
-// and handles values from the environment affects which traits the closure
-// automatically implements. The compiler will decide which of these to use
-// based on what the body of the function does with the captured values.
-// Closures will automatically implement one, two, or all three of the following
-// traits, in an incremental fashion, depending on how the closure’s body
-// handles the env values.
-//
-// - `FnOnce`: consumes env values so can be called only once. A closure that
-// consumes captured values (or drops them) will only implement FnOnce and none
-// of the other closure traits. All closures implement at least this trait,
-// because all closures can be called at least once.
-//
-// - `FnMut`: borrows mutably env values, applies to closures that mutate the
-// captured values. These closures can be called more than once. It's a subtype
-// of FnOnce, so it is accepted when a FnOnce is present in a trait bound.
-//
-// - `Fn`: borrow immutably env values, applies to closures that don’t consume
-// captured values and that don’t mutate captured values. These closures can
-// be called more than once without mutating their environment, which is
-// important in cases such as calling a closure multiple times concurrently.
-// It's a subtype of FnMut, so it is accepted when a FnOnce or a FnMut is
-// present in a trait bound.
-//
-// Every `Fn` meets the requirements for `FnMut`, and every `FnMut` meets
-// the requirements for `FnOnce`. They’re not three separate categories.
-// Instead, `Fn` is a subtype of `FnMut`, which is a subtype of `FnOnce`;
-// this makes `Fn` the most specific type of closure.
+## Closure Traits
+Each closure is of an anonymous type the compiler creates. You can't refer
+to the closure concrete type explicitly. The way a closure captures
+and handles values from the environment affects which traits the closure
+automatically implements. The compiler will decide which of these to use
+based on what the body of the function does with the captured values.
+Closures will automatically implement one, two, or all three of the following
+traits, in an incremental fashion, depending on how the closure’s body
+handles the env values.
 
+- `FnOnce`: consumes env values so can be called only once. A closure that
+consumes captured values (or drops them) will only implement FnOnce and none
+of the other closure traits. All closures implement at least this trait,
+because all closures can be called at least once.
+
+- `FnMut`: borrows mutably env values, applies to closures that mutate the
+captured values. These closures can be called more than once. It's a subtype
+of FnOnce, so it is accepted when a FnOnce is present in a trait bound.
+
+- `Fn`: borrow immutably env values, applies to closures that don’t consume
+captured values and that don’t mutate captured values. These closures can
+be called more than once without mutating their environment, which is
+important in cases such as calling a closure multiple times concurrently.
+It's a subtype of FnMut, so it is accepted when a FnOnce or a FnMut is
+present in a trait bound.
+
+Every `Fn` meets the requirements for `FnMut`, and every `FnMut` meets
+the requirements for `FnOnce`. They’re not three separate categories.
+Instead, `Fn` is a subtype of `FnMut`, which is a subtype of `FnOnce`;
+this makes `Fn` the most specific type of closure.
+
+```rust
 fn ex_multiple_calls() {
 
     // ❌ The closure is a FnOnce because it consumes
@@ -102,13 +104,15 @@ fn ex_multiple_calls() {
     my_fn();
     my_fn();
 }
+```
 
-// ### `FnOnce`
-// Using `FnOnce` in a trait bound expresses the constraint that the
-// generic function/struct/item is only going to call the closure at
-// most one time. Every closure trait is an `FnOnce` so all can be used
-// in place of a `FnOnce`. A `FnOnce` closure is consumed after it is called.
+### `FnOnce`
+Using `FnOnce` in a trait bound expresses the constraint that the
+generic function/struct/item is only going to call the closure at
+most one time. Every closure trait is an `FnOnce` so all can be used
+in place of a `FnOnce`. A `FnOnce` closure is consumed after it is called.
 
+```rust
 enum MyOption<T> {
     Some(T),
     None,
@@ -157,14 +161,16 @@ fn ex_trait_bounds_fn_once() {
 
     MyOption::None.unwrap_or_else(my_fn);
 }
+```
 
-// ### `FnMut`
-// FnMut is a subtype of FnOnce, so FnOnce closures don't satisfy
-// FnMut trait bounds, while Fn closures do. A FnMut must be mut
-// to be called. In the example the `map` function requires a
-// closure that can be called multiple times (once for every item
-// of the vector), and it's ok even if it mutates the captured env.
+### `FnMut`
+FnMut is a subtype of FnOnce, so FnOnce closures don't satisfy
+FnMut trait bounds, while Fn closures do. A FnMut must be mut
+to be called. In the example the `map` function requires a
+closure that can be called multiple times (once for every item
+of the vector), and it's ok even if it mutates the captured env.
 
+```rust
 fn map<V, U, F>(list: Vec<V>, mut map_fn: F) -> Vec<U>
 where
     F: FnMut(V) -> U,
@@ -206,12 +212,14 @@ fn ex_trait_bounds_fn_mut() {
 
     map(vec![1, 2, 3, 4], my_fn);
 }
+```
 
-// ### `Fn`
-// `Fn` is a subtype of FnOnce and FnMut so FnOnce and FnMut closures
-// doesn't satisfy Fn. It borrows env values immutably and can be
-// called multiple times.
+### `Fn`
+`Fn` is a subtype of FnOnce and FnMut so FnOnce and FnMut closures
+doesn't satisfy Fn. It borrows env values immutably and can be
+called multiple times.
 
+```rust
 fn requires_fn<F: Fn(i32)>(my_fn: F) {
     my_fn(1);
     my_fn(2);
@@ -251,17 +259,19 @@ fn example() {
     let res = requires_fn(my_fn);
     println!("result: {:?}", res);
 }
+```
 
-// ### `Move` keyword
-//
-// If you want to force the closure to take ownership of the values it
-// uses in the environment, even though the body of the closure doesn’t
-// strictly need ownership, you can use the `move` keyword before the
-// parameters. Note that `move` and the trait of the closure are orthogonal
-// features: whatever the trait of the closure is, `move` is an option.
-// In other words: `move' determines how values are captured, the closure
-// trait determines how values are used.
+### `Move` keyword
 
+If you want to force the closure to take ownership of the values it
+uses in the environment, even though the body of the closure doesn’t
+strictly need ownership, you can use the `move` keyword before the
+parameters. Note that `move` and the trait of the closure are orthogonal
+features: whatever the trait of the closure is, `move` is an option.
+In other words: `move' determines how values are captured, the closure
+trait determines how values are used.
+
+```rust
 fn ex_move() {
     let list = vec![1, 2, 3, 4, 5, 6, 7];
     println!("Before: {:?}", list);

@@ -176,15 +176,15 @@ For functions, several syntaxes are available to bound the type parameter;
 all are equivalent when the generic type is used as a function argument.
 
 - The simplest syntax is to use the `<T: Notification>` syntax, which means
-  that the type parameter `T` must implement the `Notification` trait.
+that the type parameter `T` must implement the `Notification` trait.
 
 - Another option is to use the `where` clause to specify in a cleaner way
-  the trait bounds on the generic types. This is usually preferred when the
-  trait bounds are complex.
+the trait bounds on the generic types. This is usually preferred when the
+trait bounds are complex.
 
 - Finally, another syntax is to use the `impl` keyword in the parameter
-  list to specify that the argument must implement that trait. The result is
-  identical to the other 2 syntaxes, but note that it's less flexible.
+list to specify that the argument must implement that trait. The result is
+identical to the other 2 syntaxes, but note that it's less flexible.
 
 ```rust
 pub fn ex_use_notif<T: Notification>(item: T) {
@@ -406,8 +406,3 @@ fn ex_blanket_impl_notification() {
 }
 ```
 
-## TODO
-
-- generic traits
-- associated items
-- trait objects
