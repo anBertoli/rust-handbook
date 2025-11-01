@@ -406,3 +406,8 @@ fn ex_blanket_impl_notification() {
 }
 ```
 
+## TODO
+- generic traits
+- associated items
+- trait objects
+

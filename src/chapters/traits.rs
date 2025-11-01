@@ -383,3 +383,8 @@ fn ex_blanket_impl_notification() {
     // implemented it for us.
     println!("{}", tuple.text());
 }
+
+//t ## TODO
+//t - generic traits
+//t - associated items
+//t - trait objects
