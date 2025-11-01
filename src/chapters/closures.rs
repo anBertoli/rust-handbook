@@ -255,7 +255,7 @@ fn example() {
     println!("result: {:?}", res);
 }
 
-//t ## `Move`ing values
+//t ## Moving Values
 //t
 //t If you want to force the closure to take ownership of the values it
 //t uses in the environment, even though the body of the closure doesn’t
