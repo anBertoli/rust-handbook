@@ -28,6 +28,7 @@ fn ex_closures() {
 }
 
 //t ## Closure Traits
+//t
 //t Each closure is of an anonymous type the compiler creates. You can't refer
 //t to the closure concrete type explicitly. The way a closure captures
 //t and handles values from the environment affects which traits the closure
@@ -103,6 +104,7 @@ fn ex_multiple_calls() {
 }
 
 //t ### `FnOnce`
+//t
 //t Using `FnOnce` in a trait bound expresses the constraint that the
 //t generic function/struct/item is only going to call the closure at
 //t most one time. Every closure trait is an `FnOnce` so all can be used
@@ -158,6 +160,7 @@ fn ex_trait_bounds_fn_once() {
 }
 
 //t ### `FnMut`
+//t
 //t FnMut is a subtype of FnOnce, so FnOnce closures don't satisfy
 //t FnMut trait bounds, while Fn closures do. A FnMut must be mut
 //t to be called. In the example the `map` function requires a
@@ -207,6 +210,7 @@ fn ex_trait_bounds_fn_mut() {
 }
 
 //t ### `Fn`
+//t
 //t `Fn` is a subtype of FnOnce and FnMut so FnOnce and FnMut closures
 //t doesn't satisfy Fn. It borrows env values immutably and can be
 //t called multiple times.
@@ -251,7 +255,7 @@ fn example() {
     println!("result: {:?}", res);
 }
 
-//t ### `Move` keyword
+//t ## `Move`ing values
 //t
 //t If you want to force the closure to take ownership of the values it
 //t uses in the environment, even though the body of the closure doesn’t
