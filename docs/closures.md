@@ -265,7 +265,7 @@ fn example() {
 }
 ```
 
-## `Move`ing values
+## Moving Values
 
 If you want to force the closure to take ownership of the values it
 uses in the environment, even though the body of the closure doesn’t
